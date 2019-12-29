@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "511787473532",
+    "firebase_url": "https://restaurant-finding-appli-262d5.firebaseio.com",
+    "project_id": "restaurant-finding-appli-262d5",
+    "storage_bucket": "restaurant-finding-appli-262d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511787473532:android:104cd2cdf8b3a39a9007f9",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511787473532-1q3ifo38kdco7a1a89o6aso3nagdeqvr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myapplication",
+            "certificate_hash": "5224db20dbed6f5502ec45cd97eead5cc61212d8"
+          }
+        },
+        {
+          "client_id": "511787473532-h1gmvj5pn92fq12f9s1h2b5n5rp4bspg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuHEUYx1Vctqqz7BjQHC6H5omgw7HlHbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "511787473532-h1gmvj5pn92fq12f9s1h2b5n5rp4bspg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511787473532:android:80ca4202e8e3741f9007f9",
+        "android_client_info": {
+          "package_name": "com.student.restaurantfindingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511787473532-ns347qnoohee7p6mdnr9t28eg3edl6ag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.student.restaurantfindingapp",
+            "certificate_hash": "6dedb1406068f267ddcb2ca21432d6d9d595fc79"
+          }
+        },
+        {
+          "client_id": "511787473532-h1gmvj5pn92fq12f9s1h2b5n5rp4bspg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuHEUYx1Vctqqz7BjQHC6H5omgw7HlHbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "511787473532-h1gmvj5pn92fq12f9s1h2b5n5rp4bspg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
