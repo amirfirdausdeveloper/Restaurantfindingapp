@@ -1,4 +1,4 @@
-package com.student.restaurantfindingapp.Customer.Activity;
+package com.student.restaurantfindingapp.Owner.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,27 +16,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.student.restaurantfindingapp.Customer.Activity.RegisterCustomer;
 import com.student.restaurantfindingapp.MainActivity;
 import com.student.restaurantfindingapp.R;
 
-public class LoginCustomer extends AppCompatActivity {
+public class LoginOwner extends AppCompatActivity {
 
     //DECLARE
     ImageView imageView_back;
     EditText editText_email,editText_password;
     Button button_login,button_register;
-    TextView textView_skip;
     private DatabaseReference mDatabase;
-    public static int customerLogin = 0;
-    public static String emailCustomer;
+    public static String ownerEmail = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_customer);
+        setContentView(R.layout.activity_login_owner);
 
         //FIREBASE DATABASE REF
-        mDatabase = FirebaseDatabase.getInstance().getReference("customer");
+        mDatabase = FirebaseDatabase.getInstance().getReference("owner");
 
         //DECLARE
         imageView_back = findViewById(R.id.imageView_back);
@@ -45,7 +43,6 @@ public class LoginCustomer extends AppCompatActivity {
         editText_password = findViewById(R.id.editText_password);
         button_login = findViewById(R.id.button_login);
         button_register = findViewById(R.id.button_register);
-        textView_skip = findViewById(R.id.textView_skip);
 
         //BACK CLICK
         imageView_back.setOnClickListener(new View.OnClickListener() {
@@ -55,10 +52,11 @@ public class LoginCustomer extends AppCompatActivity {
             }
         });
 
-        textView_skip.setOnClickListener(new View.OnClickListener() {
+        button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customerLogin = 0;
+                Intent next = new Intent(getApplicationContext(), RegisterOwner.class);
+                startActivity(next);
             }
         });
 
@@ -72,14 +70,6 @@ public class LoginCustomer extends AppCompatActivity {
                 }else {
                     login();
                 }
-            }
-        });
-
-        button_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(getApplicationContext(),RegisterCustomer.class);
-                startActivity(next);
             }
         });
     }
@@ -98,10 +88,10 @@ public class LoginCustomer extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot customer: dataSnapshot.getChildren()) {
                                 if(editText_password.getText().toString().equals(customer.child("password").getValue().toString())){
-                                    customerLogin = 1;
-                                    emailCustomer = editText_email.getText().toString();
-                                    Intent next = new Intent(getApplicationContext(), CustomerDashboard.class);
+                                    ownerEmail = editText_email.getText().toString();
+                                    Intent next = new Intent(getApplicationContext(), OwnerDashboard.class);
                                     startActivity(next);
+                                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                                 }else{
                                     Toast.makeText(getApplicationContext(), "Wrong password !!!", Toast.LENGTH_LONG).show();
                                 }

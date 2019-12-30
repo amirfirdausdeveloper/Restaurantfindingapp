@@ -9,9 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Customer.Activity.RegisterCustomer"></activity>
+        <activity android:name=".Customer.Activity.CustomerDashboard"></activity>
+        <activity android:name=".Owner.Activity.OwnerAddRestaurant" />
+        <activity android:name=".Owner.Activity.OwnerDashboard" />
+        <activity android:name=".Owner.Activity.RegisterOwner" />
+        <activity android:name=".Customer.Activity.RegisterCustomer" />
         <activity android:name=".Admin.LoginAdmin" />
-        <activity android:name=".Owner.LoginOwner" />
+        <activity android:name=".Owner.Activity.LoginOwner" />
         <activity android:name=".Customer.Activity.LoginCustomer" />
         <activity android:name=".MainActivity">
             <intent-filter>

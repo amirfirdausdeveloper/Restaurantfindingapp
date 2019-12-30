@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="65dp"
+            android:layout_height="70dp"
+            android:background="@drawable/restaurant_icon" />
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:textSize="16dp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:id="@+id/textView_rname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Restaurant ABC" />
+
+            <TextView
+                android:layout_marginTop="3dp"
+                android:textSize="13dp"
+                android:textColor="@android:color/black"
+                android:id="@+id/textView_raddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Melaka" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:orientation="vertical"></LinearLayout>
+</LinearLayout>
