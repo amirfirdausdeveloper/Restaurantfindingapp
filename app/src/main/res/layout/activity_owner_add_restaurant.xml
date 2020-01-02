@@ -87,6 +87,34 @@
                     android:inputType="textPersonName"
                     android:paddingLeft="10dp" />
 
+                <LinearLayout
+                    android:layout_margin="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/custom_background_linear_white_3"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView_gambar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_margin="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/custom_background_linear_white_3"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView_gambar_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                </LinearLayout>
+
                 <Button
                     android:id="@+id/button_add"
                     android:layout_width="match_parent"
