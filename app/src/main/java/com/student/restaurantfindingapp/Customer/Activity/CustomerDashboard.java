@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +31,8 @@ public class CustomerDashboard extends AppCompatActivity {
     List<RestaurantClass> restaurantClasses;
     private RestaurantListAdapter adapter;
     private DatabaseReference mDatabaseSaman;
+    ImageView imageView_myAcc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,7 @@ public class CustomerDashboard extends AppCompatActivity {
 
         //DECLARE
         recyclerView = findViewById(R.id.recyclerView);
+        imageView_myAcc = findViewById(R.id.imageView_myAcc);
 
         //UTK SEARCH
         //SEARCHING
@@ -54,6 +60,21 @@ public class CustomerDashboard extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
                 return false;
+            }
+        });
+
+        //GO TO MY ACCOUNT
+        imageView_myAcc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(LoginCustomer.customerLogin == 0){
+                    Intent next = new Intent(getApplicationContext(),LoginCustomer.class);
+                    startActivity(next);
+                }else {
+                    Intent next = new Intent(getApplicationContext(),AccountActivity.class);
+                    startActivity(next);
+                }
+
             }
         });
     }
@@ -81,7 +102,10 @@ public class CustomerDashboard extends AppCompatActivity {
                                     restaurant.child("raddress").getValue().toString(),
                                     restaurant.child("rmenu").getValue().toString(),
                                     restaurant.child("rmeals").getValue().toString(),
-                                    restaurant.child("ownerid").getValue().toString()
+                                    restaurant.child("ownerid").getValue().toString(),
+                                    restaurant.child("gambar1").getValue().toString(),
+                                    restaurant.child("gambar2").getValue().toString()
+
                             ));
 
                             adapter = new RestaurantListAdapter(getApplicationContext(), restaurantClasses, CustomerDashboard.this);

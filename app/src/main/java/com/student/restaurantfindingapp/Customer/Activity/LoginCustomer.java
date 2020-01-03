@@ -59,6 +59,8 @@ public class LoginCustomer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 customerLogin = 0;
+                Intent next = new Intent(getApplicationContext(), CustomerDashboard.class);
+                startActivity(next);
             }
         });
 
