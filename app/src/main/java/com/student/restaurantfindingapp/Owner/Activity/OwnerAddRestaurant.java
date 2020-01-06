@@ -6,13 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,17 +30,24 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.student.restaurantfindingapp.Owner.Class.OwnerClass;
 import com.student.restaurantfindingapp.Owner.Class.RestaurantClass;
 import com.student.restaurantfindingapp.R;
 import com.student.restaurantfindingapp.StandardProgressDialog;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class OwnerAddRestaurant extends AppCompatActivity {
 
     ImageView imageView_back;
-    EditText editText_name,editText_address,editText_menu,editText_meals;
+    EditText editText_name,editText_address,editText_menu,editText_mobile;
+    Spinner editText_meals;
     Button button_add;
     private DatabaseReference mDatabase;
     ImageView imageView_gambar,imageView_gambar2;
@@ -45,11 +57,18 @@ public class OwnerAddRestaurant extends AppCompatActivity {
     boolean statusImage2 = false;
     private StorageReference mStorageRef;
     StandardProgressDialog standardProgressDialog;
+    boolean statusEditGambar1 = false;
+    boolean statusEditGambar2 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_add_restaurant);
+
+        if (android.os.Build.VERSION.SDK_INT >= 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         //FIREBASE DATABASE REF
         mDatabase = FirebaseDatabase.getInstance().getReference("restaurant");
@@ -62,6 +81,7 @@ public class OwnerAddRestaurant extends AppCompatActivity {
         editText_address = findViewById(R.id.editText_address);
         editText_menu = findViewById(R.id.editText_menu);
         editText_meals = findViewById(R.id.editText_meals);
+        editText_mobile = findViewById(R.id.editText_mobile);
         button_add = findViewById(R.id.button_add);
         imageView_gambar = findViewById(R.id.imageView_gambar);
         imageView_gambar2 = findViewById(R.id.imageView_gambar_2);
@@ -76,20 +96,34 @@ public class OwnerAddRestaurant extends AppCompatActivity {
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText_name.getText().toString().equals("")){
-                    Toast.makeText(getApplicationContext(),"Fill Restaurant Name",Toast.LENGTH_LONG).show();
-                }else if(editText_address.getText().toString().equals("")){
-                    Toast.makeText(getApplicationContext(),"Fill Restaurant Address",Toast.LENGTH_LONG).show();
-                }else if(editText_menu.getText().toString().equals("")){
-                    Toast.makeText(getApplicationContext(),"Fill Restaurant Menu",Toast.LENGTH_LONG).show();
-                }else if(editText_meals.getText().toString().equals("")){
-                    Toast.makeText(getApplicationContext(),"Fill Restaurant Meals",Toast.LENGTH_LONG).show();
-                }else if(statusImage == false || statusImage2 == false){
-                    Toast.makeText(getApplicationContext(),"Insert image fist",Toast.LENGTH_LONG).show();
-                } else {
-                    standardProgressDialog.show();
-                    insertImageFirst();
+
+                if(getIntent().hasExtra("status")){
+                    if(statusEditGambar1 == false || statusEditGambar2 == false){
+                        editRestaurant();
+                    }else {
+                        standardProgressDialog.show();
+                        insertImageFirst();
+                    }
+                }else {
+                    if(editText_name.getText().toString().equals("")){
+                        Toast.makeText(getApplicationContext(),"Fill Restaurant Name",Toast.LENGTH_LONG).show();
+                    }else if(editText_address.getText().toString().equals("")){
+                        Toast.makeText(getApplicationContext(),"Fill Restaurant Address",Toast.LENGTH_LONG).show();
+                    }else if(editText_menu.getText().toString().equals("")){
+                        Toast.makeText(getApplicationContext(),"Fill Restaurant Menu",Toast.LENGTH_LONG).show();
+                    }else if(editText_meals.getSelectedItem().toString().equals("Choose Meals")){
+                        Toast.makeText(getApplicationContext(),"Fill Restaurant Meals",Toast.LENGTH_LONG).show();
+                    }else if(editText_mobile.getText().toString().equals("")){
+                        Toast.makeText(getApplicationContext(),"Fill mobile no",Toast.LENGTH_LONG).show();
+                    }else if(statusImage == false || statusImage2 == false){
+                        Toast.makeText(getApplicationContext(),"Insert image fist",Toast.LENGTH_LONG).show();
+                    } else {
+                        standardProgressDialog.show();
+                        insertImageFirst();
+
+                    }
                 }
+
             }
         });
 
@@ -108,6 +142,134 @@ public class OwnerAddRestaurant extends AppCompatActivity {
                 startActivityForResult(intent, 2);
             }
         });
+
+
+        //KALAU EDIT MASUK SINI
+        if(getIntent().hasExtra("status")){
+            if(getIntent().getStringExtra("status").equals("edit")){
+                TextView textView2 = findViewById(R.id.textView2);
+                textView2.setText("Edit Restaurant");
+                button_add.setText("Edit Restaurant");
+
+                editText_name.setText(getIntent().getStringExtra("rname"));
+                editText_name.setEnabled(false);
+                editText_address.setText(getIntent().getStringExtra("raddress"));
+                editText_menu.setText(getIntent().getStringExtra("rmenu"));
+                editText_meals.setSelection(getIndex(editText_meals,getIntent().getStringExtra("rmeals")));
+                editText_mobile.setText(getIntent().getStringExtra("mobile"));
+
+                URL url = null;
+                URL url2 = null;
+                try {
+                    url = new URL(getIntent().getStringExtra("gambar1"));
+                    Bitmap myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    imageView_gambar.setImageBitmap(myBitmap);
+
+                    url2 = new URL(getIntent().getStringExtra("gambar2"));
+                    Bitmap myBitmaps = BitmapFactory.decodeStream(url2.openConnection().getInputStream());
+                    imageView_gambar2.setImageBitmap(myBitmaps);
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    public Bitmap getbmpfromURL(String surl){
+        try {
+            URL url = new URL(surl);
+            HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
+            urlcon.setDoInput(true);
+            urlcon.connect();
+            InputStream in = urlcon.getInputStream();
+            Bitmap mIcon = BitmapFactory.decodeStream(in);
+            return  mIcon;
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void editRestaurant(){
+        mDatabase.orderByChild("rname").equalTo(editText_name.getText().toString())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot restaurant : dataSnapshot.getChildren()) {
+                                restaurant.getRef().child("gambar1").setValue(getIntent().getStringExtra("gambar1"));
+                                restaurant.getRef().child("gambar2").setValue(getIntent().getStringExtra("gambar2"));
+                                restaurant.getRef().child("ownerid").setValue(LoginOwner.ownerEmail);
+                                restaurant.getRef().child("raddress").setValue(editText_address.getText().toString());
+                                restaurant.getRef().child("rmeals").setValue(editText_meals.getSelectedItem().toString());
+                                restaurant.getRef().child("rmenu").setValue(editText_menu.getText().toString());
+                                restaurant.getRef().child("mobile").setValue(editText_mobile.getText().toString());
+
+                                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                            }
+
+                        }else {
+                            Log.d("Exist","Exists");
+                        }
+//                        if (dataSnapshot.exists()) {
+//                            Log.d("Exist","Exist");
+//                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        standardProgressDialog.dismiss();
+
+                    }
+                });
+    }
+
+    private void editRestaurants(){
+        mDatabase.orderByChild("rname").equalTo(editText_name.getText().toString())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot restaurant : dataSnapshot.getChildren()) {
+                                restaurant.getRef().child("gambar1").setValue(url);
+                                restaurant.getRef().child("gambar2").setValue(url2);
+                                restaurant.getRef().child("ownerid").setValue(LoginOwner.ownerEmail);
+                                restaurant.getRef().child("raddress").setValue(editText_address.getText().toString());
+                                restaurant.getRef().child("rmeals").setValue(editText_meals.getSelectedItem().toString());
+                                restaurant.getRef().child("rmenu").setValue(editText_menu.getText().toString());
+                                restaurant.getRef().child("mobile").setValue(editText_mobile.getText().toString());
+
+                                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                            }
+
+                        }else {
+                            Log.d("Exist","Exists");
+                        }
+//                        if (dataSnapshot.exists()) {
+//                            Log.d("Exist","Exist");
+//                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        standardProgressDialog.dismiss();
+
+                    }
+                });
     }
 
     private void addRestaurant(){
@@ -126,9 +288,10 @@ public class OwnerAddRestaurant extends AppCompatActivity {
                                     editText_name.getText().toString().toUpperCase(),
                                     editText_address.getText().toString(),
                                     editText_menu.getText().toString(),
-                                    editText_meals.getText().toString(),
+                                    editText_meals.getSelectedItem().toString(),
                                     LoginOwner.ownerEmail,
-                                    url,url2);
+                                    url,url2,
+                                    editText_mobile.getText().toString());
 
                             //Saving the pensyasrah
                             mDatabase.child(id).setValue(restaurantClass);
@@ -159,6 +322,7 @@ public class OwnerAddRestaurant extends AppCompatActivity {
                 selected_image = Bitmap.createScaledBitmap(thumbnail, 750, 1000, true);
                 imageView_gambar.setImageBitmap(selected_image);
                 statusImage = true;
+                statusEditGambar1 = true;
 
             }
             if (requestCode == 2) {
@@ -166,10 +330,18 @@ public class OwnerAddRestaurant extends AppCompatActivity {
                 selected_image2 = Bitmap.createScaledBitmap(thumbnail, 750, 1000, true);
                 imageView_gambar2.setImageBitmap(selected_image2);
                 statusImage2 = true;
+                statusEditGambar2 = true;
 
             }
         }else {
-
+            if(getIntent().hasExtra("status")){
+                if(requestCode == 1){
+                    statusEditGambar1 = false;
+                }
+                if(requestCode == 2){
+                    statusEditGambar2 = false;
+                }
+            }
         }
 
     }
@@ -220,7 +392,12 @@ public class OwnerAddRestaurant extends AppCompatActivity {
                             public void onSuccess(Object o) {
                                 url2 = o.toString();
                                 standardProgressDialog.dismiss();
-                                addRestaurant();
+                                if (getIntent().hasExtra("status")){
+                                    editRestaurants();
+                                }else {
+                                    addRestaurant();
+                                }
+
                             }
                         });
 

@@ -9,12 +9,13 @@ public class RestaurantClass {
     private String ownerid;
     private String gambar1;
     private String gambar2;
+    private String mobile;
 
     public RestaurantClass(){
         //this constructor is required
     }
 
-    public RestaurantClass(String rname, String raddress, String rmenu, String rmeals, String ownerid,String gambar1, String gambar2) {
+    public RestaurantClass(String rname, String raddress, String rmenu, String rmeals, String ownerid,String gambar1, String gambar2,String mobile) {
         this.rname = rname;
         this.raddress = raddress;
         this.rmenu = rmenu;
@@ -22,6 +23,11 @@ public class RestaurantClass {
         this.ownerid = ownerid;
         this.gambar1 = gambar1;
         this.gambar2 = gambar2;
+        this.mobile = mobile;
+    }
+
+    public String getMobile() {
+        return mobile;
     }
 
     public String getGambar1() {

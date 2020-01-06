@@ -41,13 +41,15 @@ public class RestaurantDetails extends AppCompatActivity implements ViewPagerEx.
     private ViewFlipper myViewFlipper;
     private float initialXPoint;
     String rname,raddress,rmenu,rmeals,ownerid,gambar1,gambar2;
-    private DatabaseReference mDatabaseSaman,mDatabaseRating,mDatabaseComment;
+    private DatabaseReference mDatabaseSaman,mDatabaseRating,mDatabaseComment,mDatabaseReview;
     SliderLayout mDemoSlider;
     RatingBar rating;
     TextView textView_rname,textView_rowner,textView_rmeals,textView_rmenu;
     ImageView imageView_back;
     EditText editText_comment;
     Button button_submit;
+    String totalReviewRate = "0.0";
+    String mobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class RestaurantDetails extends AppCompatActivity implements ViewPagerEx.
         mDatabaseSaman = FirebaseDatabase.getInstance().getReference("restaurant");
         mDatabaseRating = FirebaseDatabase.getInstance().getReference("rating");
         mDatabaseComment = FirebaseDatabase.getInstance().getReference("comment");
+        mDatabaseReview = FirebaseDatabase.getInstance().getReference("review");
 
         //GET INTENT
         rname = getIntent().getStringExtra("rname");
@@ -67,6 +70,7 @@ public class RestaurantDetails extends AppCompatActivity implements ViewPagerEx.
         ownerid = getIntent().getStringExtra("ownerid");
         gambar1 = getIntent().getStringExtra("gambar1");
         gambar2 = getIntent().getStringExtra("gambar2");
+        mobile = getIntent().getStringExtra("mobile");
 
         mDemoSlider = findViewById(R.id.slider);
         rating = findViewById(R.id.rating);
@@ -77,7 +81,7 @@ public class RestaurantDetails extends AppCompatActivity implements ViewPagerEx.
         textView_rmenu = findViewById(R.id.textView_rmenu);
 
         textView_rname.setText(rname);
-        textView_rowner.setText(ownerid);
+        textView_rowner.setText(mobile);
         textView_rmeals.setText(rmeals);
         textView_rmenu.setText(rmenu);
 
@@ -98,7 +102,8 @@ public class RestaurantDetails extends AppCompatActivity implements ViewPagerEx.
         rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,
                                         boolean fromUser) {
-                rateFunction(String.valueOf(rating));
+//                rateFunction(String.valueOf(rating));
+                totalReviewRate = String.valueOf(rating);
             }
         });
 
@@ -122,7 +127,7 @@ public class RestaurantDetails extends AppCompatActivity implements ViewPagerEx.
         url_maps.put("gambar2", gambar2);
 
         for(String name : url_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(this);
+            TextSliderView textSliderView = new TextSliderView(RestaurantDetails.this);
             // initialize a SliderLayout
             textSliderView
                     .description(name)
@@ -169,17 +174,18 @@ public class RestaurantDetails extends AppCompatActivity implements ViewPagerEx.
 
     //functionComment
     private void functionComment(){
-        mDatabaseComment.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReview.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String id = mDatabaseComment.push().getKey();
-                mDatabaseComment.child(id).setValue(id);
-                mDatabaseComment.child(id).child("ownerid").setValue(ownerid);
-                mDatabaseComment.child(id).child("rname").setValue(rname);
-                mDatabaseComment.child(id).child("customerid").setValue(LoginCustomer.emailCustomer);
-                mDatabaseComment.child(id).child("comment").setValue(editText_comment.getText().toString());
-                Toast.makeText(getApplicationContext(),"Comment success",Toast.LENGTH_LONG).show();
+                String id = mDatabaseReview.push().getKey();
+                mDatabaseReview.child(id).setValue(id);
+                mDatabaseReview.child(id).child("ownerid").setValue(ownerid);
+                mDatabaseReview.child(id).child("rname").setValue(rname);
+                mDatabaseReview.child(id).child("customerid").setValue(LoginCustomer.emailCustomer);
+                mDatabaseReview.child(id).child("comment").setValue(editText_comment.getText().toString());
+                mDatabaseReview.child(id).child("rate").setValue(totalReviewRate);
+                Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_LONG).show();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

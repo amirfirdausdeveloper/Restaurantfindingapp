@@ -68,6 +68,16 @@
                     android:paddingLeft="10dp" />
 
                 <EditText
+                    android:id="@+id/editText_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/custom_background_linear_white"
+                    android:hint="Mobile No"
+                    android:inputType="phone"
+                    android:paddingLeft="10dp" />
+
+                <EditText
                     android:id="@+id/editText_menu"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -77,15 +87,15 @@
                     android:inputType="textPersonName"
                     android:paddingLeft="10dp" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/editText_meals"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_margin="20dp"
-                    android:background="@drawable/custom_background_linear_white"
-                    android:hint="Restaurant Meals"
-                    android:inputType="textPersonName"
-                    android:paddingLeft="10dp" />
+                    android:background="@drawable/custom_spinner_state_background"
+                    android:entries="@array/spinner_state"
+                    android:spinnerMode="dropdown" />
+
 
                 <LinearLayout
                     android:layout_margin="20dp"

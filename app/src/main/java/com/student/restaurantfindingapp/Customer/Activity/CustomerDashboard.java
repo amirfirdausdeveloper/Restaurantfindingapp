@@ -104,7 +104,8 @@ public class CustomerDashboard extends AppCompatActivity {
                                     restaurant.child("rmeals").getValue().toString(),
                                     restaurant.child("ownerid").getValue().toString(),
                                     restaurant.child("gambar1").getValue().toString(),
-                                    restaurant.child("gambar2").getValue().toString()
+                                    restaurant.child("gambar2").getValue().toString(),
+                                    restaurant.child("mobile").getValue().toString()
 
                             ));
 

@@ -40,10 +40,38 @@ public class OwnerDashboard extends AppCompatActivity {
             }
         });
 
+        //ADD RESTAURANT
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(getApplicationContext(),OwnerAddRestaurant.class);
+                startActivity(next);
+            }
+        });
+
+        //MANAGE ACCOUNT
+        button_manage_acc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(getApplicationContext(),OwnerManageAccount.class);
+                startActivity(next);
+            }
+        });
+
+        //VIEW RESTAURANT
+        button_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(getApplicationContext(),OwnerViewRestaurant.class);
+                startActivity(next);
+            }
+        });
+
+        //view review
+        button_myreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(getApplicationContext(),OwnerReview.class);
                 startActivity(next);
             }
         });

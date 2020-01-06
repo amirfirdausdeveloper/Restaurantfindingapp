@@ -18,7 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Customer.Activity.AccountActivity"></activity>
+        <activity android:name=".Owner.Activity.OwnerReview"></activity>
+        <activity android:name=".Owner.Activity.OwnerViewRestaurant" />
+        <activity android:name=".Owner.Activity.OwnerManageAccount" />
+        <activity android:name=".Customer.Activity.AccountActivity" />
         <activity android:name=".Customer.Activity.RestaurantDetails" />
         <activity android:name=".Customer.Activity.CustomerDashboard" />
         <activity android:name=".Owner.Activity.OwnerAddRestaurant" />
