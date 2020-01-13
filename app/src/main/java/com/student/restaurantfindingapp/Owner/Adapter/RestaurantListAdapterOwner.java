@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.student.restaurantfindingapp.Admin.Activity.DashboardAdmin;
 import com.student.restaurantfindingapp.Customer.Activity.LoginCustomer;
 import com.student.restaurantfindingapp.Customer.Activity.RestaurantDetails;
 import com.student.restaurantfindingapp.Owner.Activity.LoginOwner;
@@ -107,7 +108,7 @@ public class RestaurantListAdapterOwner extends RecyclerView.Adapter<RestaurantL
 
     private void deleteRestaurant(String ownerid, final String rname) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("restaurant");
-        mDatabase.orderByChild("ownerid").equalTo(LoginOwner.ownerEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.orderByChild("ownerid").equalTo(ownerid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -115,8 +116,15 @@ public class RestaurantListAdapterOwner extends RecyclerView.Adapter<RestaurantL
                         if(rname.equals(restaurant.child("rname").getValue().toString())){
                             restaurant.getRef().removeValue();
                             Toast.makeText(activity,"Success Delete",Toast.LENGTH_LONG).show();
-                            Intent next = new Intent(activity, OwnerDashboard.class);
-                            activity.startActivity(next);
+
+                            if(LoginOwner.ownerEmail.equals("") || LoginOwner.ownerEmail.equals(null)){
+                                Intent next = new Intent(activity, DashboardAdmin.class);
+                                activity.startActivity(next);
+                            }else {
+                                Intent next = new Intent(activity, OwnerDashboard.class);
+                                activity.startActivity(next);
+                            }
+
                         }
                     }
 

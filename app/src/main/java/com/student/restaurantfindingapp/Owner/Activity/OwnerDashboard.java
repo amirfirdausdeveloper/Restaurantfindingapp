@@ -76,4 +76,9 @@ public class OwnerDashboard extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

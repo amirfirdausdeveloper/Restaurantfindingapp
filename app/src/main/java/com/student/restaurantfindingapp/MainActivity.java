@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.student.restaurantfindingapp.Admin.LoginAdmin;
+import com.student.restaurantfindingapp.Admin.Activity.LoginAdmin;
 import com.student.restaurantfindingapp.Customer.Activity.LoginCustomer;
 import com.student.restaurantfindingapp.Owner.Activity.LoginOwner;
 

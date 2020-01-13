@@ -22,7 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.student.restaurantfindingapp.Admin.Activity.DashboardAdmin;
 import com.student.restaurantfindingapp.Owner.Activity.LoginOwner;
+import com.student.restaurantfindingapp.Owner.Activity.OwnerAddRestaurant;
 import com.student.restaurantfindingapp.Owner.Activity.OwnerDashboard;
 import com.student.restaurantfindingapp.Owner.Class.RestaurantClass;
 import com.student.restaurantfindingapp.Owner.Class.ReviewClass;
@@ -65,6 +67,59 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ProductVie
         holder.textView_comment.setText(reviewClass.getComment());
         holder.rating.setRating(Float.parseFloat(reviewClass.getRate()));
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(LoginOwner.ownerEmail.equals("") || LoginOwner.ownerEmail.equals(null)){
+                    new AlertDialog.Builder(activity)
+                            .setCancelable(true)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setMessage("Are you sure want to delete?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteRestaurant(reviewClass.getCustomerid(),reviewClass.getOwnerid(),reviewClass.getComment());
+                                }
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                }
+            }
+        });
+
+    }
+
+    private void deleteRestaurant(String customerid, final String ownerid, final String comment) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("review");
+        mDatabase.orderByChild("customerid").equalTo(customerid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot restaurant: dataSnapshot.getChildren()) {
+                        if(ownerid.equals(restaurant.child("ownerid").getValue().toString()) && comment.equals(restaurant.child("comment").getValue().toString())){
+                            restaurant.getRef().removeValue();
+                            Toast.makeText(activity,"Success Delete",Toast.LENGTH_LONG).show();
+
+                            if(LoginOwner.ownerEmail.equals("") || LoginOwner.ownerEmail.equals(null)){
+                                Intent next = new Intent(activity, DashboardAdmin.class);
+                                activity.startActivity(next);
+                            }else {
+                                Intent next = new Intent(activity, OwnerDashboard.class);
+                                activity.startActivity(next);
+                            }
+
+                        }
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
