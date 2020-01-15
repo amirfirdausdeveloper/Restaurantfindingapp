@@ -90,7 +90,8 @@
                 android:layout_marginRight="100dp"
                 android:background="@drawable/custom_background_linear_white_2"
                 android:text="REGISTER"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

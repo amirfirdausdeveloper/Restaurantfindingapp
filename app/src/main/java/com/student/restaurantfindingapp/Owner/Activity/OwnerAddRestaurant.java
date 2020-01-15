@@ -3,7 +3,9 @@ package com.student.restaurantfindingapp.Owner.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -130,16 +132,54 @@ public class OwnerAddRestaurant extends AppCompatActivity {
         imageView_gambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
+
+                new AlertDialog.Builder(OwnerAddRestaurant.this)
+                        .setCancelable(true)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setMessage("Please Select")
+                        .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, 1);
+                            }
+                        }).setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(pickPhoto , 11);
+                    }
+                }).show();
+
             }
         });
 
         imageView_gambar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 2);
+                new AlertDialog.Builder(OwnerAddRestaurant.this)
+                        .setCancelable(true)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setMessage("Please Select")
+                        .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, 2);
+                            }
+                        }).setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(pickPhoto , 22);
+                    }
+                }).show();
             }
         });
 
@@ -325,6 +365,34 @@ public class OwnerAddRestaurant extends AppCompatActivity {
                 statusEditGambar1 = true;
 
             }
+            if (requestCode == 11) {
+                Uri selectedImage = data.getData();
+                Bitmap thumbnail = null;
+                try {
+                    thumbnail = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                selected_image = Bitmap.createScaledBitmap(thumbnail, 750, 1000, true);
+                imageView_gambar.setImageBitmap(selected_image);
+                statusImage = true;
+                statusEditGambar1 = true;
+
+            }
+            if (requestCode == 22) {
+                Uri selectedImage = data.getData();
+                Bitmap thumbnail = null;
+                try {
+                    thumbnail = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                selected_image2 = Bitmap.createScaledBitmap(thumbnail, 750, 1000, true);
+                imageView_gambar2.setImageBitmap(selected_image2);
+                statusImage2 = true;
+                statusEditGambar2 = true;
+
+            }
             if (requestCode == 2) {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 selected_image2 = Bitmap.createScaledBitmap(thumbnail, 750, 1000, true);
@@ -360,7 +428,6 @@ public class OwnerAddRestaurant extends AppCompatActivity {
                             @Override
                             public void onSuccess(Object o) {
                                 url = o.toString();
-                                standardProgressDialog.dismiss();
                                 insertImageSecond();
                             }
                         });
@@ -379,7 +446,7 @@ public class OwnerAddRestaurant extends AppCompatActivity {
 
     private void insertImageSecond(){
         standardProgressDialog.show();
-        Uri file = getImageUri(getApplicationContext(),selected_image);
+        Uri file = getImageUri(getApplicationContext(),selected_image2);
         StorageReference riversRef = mStorageRef.child("imageGambar/dua/"+LoginOwner.ownerEmail+".jpg");
 
         riversRef.putFile(file)

@@ -93,7 +93,7 @@
                         android:id="@+id/textView5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="OWNER DETAILS"
+                        android:text="RESTAURANT PHONE NUMBER"
                         android:textColor="@android:color/black"
                         android:textSize="16dp"
                         android:textStyle="bold" />
