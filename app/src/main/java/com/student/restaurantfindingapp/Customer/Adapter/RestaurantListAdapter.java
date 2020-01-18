@@ -68,7 +68,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     public void onBindViewHolder(final ProductViewHolder holder, final int position) {
         final RestaurantClass restaurantClass = productListClassList.get(position);
 
-        getRatings(restaurantClass.getOwnerid(),restaurantClass.getRname(),holder.ratingBar);
+        getRatings(restaurantClass.getOwnerid(),restaurantClass.getRname(),holder.ratingBar,holder.textView_rating);
         holder.textView_rname.setText(restaurantClass.getRname());
         holder.textView_raddress.setText(restaurantClass.getRaddress());
 
@@ -96,7 +96,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     }
 
 
-    private void getRatings(String ownerid, String rname, final RatingBar ratingBar){
+    private void getRatings(String ownerid, String rname, final RatingBar ratingBar, final TextView textView_rating){
         Log.d("rname", rname);
         rating = 0;
         counts = 0;
@@ -124,7 +124,9 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                         Drawable drawable = ratingBar.getProgressDrawable();
                         drawable.setColorFilter(Color.parseColor("#BE312E"), PorterDuff.Mode.SRC_ATOP);
                     }
+
                     ratingBar.setRating(Float.parseFloat(String.valueOf(total_ratingAll)));
+                    textView_rating.setText(String.valueOf(total_ratingAll));
                 }
 
 
@@ -142,7 +144,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
     class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textView_rname,textView_raddress;
+        TextView textView_rname,textView_raddress,textView_rating;
         ImageView imageView_saman;
         RatingBar ratingBar;
         public ProductViewHolder(View itemView) {
@@ -151,6 +153,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             textView_rname = itemView.findViewById(R.id.textView_rname);
             textView_raddress = itemView.findViewById(R.id.textView_raddress);
             ratingBar = itemView.findViewById(R.id.rating);
+            textView_rating = itemView.findViewById(R.id.textView_rating);
 
         }
     }
